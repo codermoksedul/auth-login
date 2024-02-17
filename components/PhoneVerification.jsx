@@ -16,7 +16,7 @@ function PhoneVerification({ onComplete }) {
     setLoading(true);
 
     // Check if all required fields are filled
-    if ( !phoneNumberInput ) {
+    if (!phoneNumberInput) {
       setError("Enter phone number");
       setLoading(false);
       return;
@@ -32,7 +32,7 @@ function PhoneVerification({ onComplete }) {
     setLoading(true);
     // Simulating a delay for demonstration purposes (you may replace this with your actual asynchronous OTP verification process)
     // Check if all required fields are filled
-    if ( !otp ) {
+    if (!otp) {
       setError("Enter OTP");
       setLoading(false);
       return;
@@ -53,12 +53,12 @@ function PhoneVerification({ onComplete }) {
     e.preventDefault();
     setLoading(true);
 
-    if ( !passwordInput ) {
+    if (!passwordInput) {
       setError("Enter Your New Password");
       setLoading(false);
       return;
     }
-    if ( !confirmPasswordInput ) {
+    if (!confirmPasswordInput) {
       setError("Enter Your Confirm Password");
       setLoading(false);
       return;

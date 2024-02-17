@@ -1,4 +1,6 @@
 "use client";
+import logo from '@/public/images/logo.webp';
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PhoneVerification from "./PhoneVerification";
@@ -81,7 +83,8 @@ useEffect(() => {
     <>
       <div id="login_area" className="w-full h-screen relative flex flex-col justify-center items-center my-5">
         <div className="container">
-          <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-10 py-[50px] rounded-lg shadow-md">
+          <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-10 py-[50px] justify-center items-center rounded-lg shadow-md">
+            <span className='w-[100px] block mx-auto mb-[50px]'><Image src={logo} alt="oli academy"/></span>
             {phoneVerified ? (
               <>
                 <h2 className="text-2xl font-semibold text-center my-2">Register OLI Academy!</h2>
@@ -102,7 +105,7 @@ useEffect(() => {
                   </div>
 
                   <button
-                    className="bg-primary-color hover:bg-white hover:text-primary-color transition-all duration-300 text-white font-medium border border-primary-color rounded-md px-3 py-2"
+                    className="btn"
                     type="submit"
                     disabled={loading}
                   >

@@ -1,6 +1,4 @@
 "use client";
-import logo from '@/public/images/logo.webp';
-import Image from "next/image";
 import { useState } from "react";
 
 function PhoneVerification({ onComplete }) {
@@ -86,20 +84,18 @@ function PhoneVerification({ onComplete }) {
       case 1:
         return (
           <form onSubmit={handlePhoneSubmit} className="flex flex-col gap-5 mt-5 justify-center items-center">
-            <span className='w-[100px]'><Image src={logo} alt="oli academy"/></span>
-            {/* <h2 className="text-2xl font-semibold text-center my-2">Register OLI Academy!</h2> */}
             {error && (
               <div className="error bg-red-100 rounded-md text-center px-2 w-fit mx-auto my-2 py-0 text-red-600">
                 {error}
               </div>
             )}
-            <input onFocus={inputFocusHandle} className="w-full border border-slate-200 px-3 py-2 rounded-md focus:border-b-2 focus:border-b-primary-color outline-none"
+            <input onFocus={inputFocusHandle} className="input"
               type="text"
               placeholder="Enter phone number"
               value={phoneNumberInput}
               onChange={(e) => setPhoneNumberInput(e.target.value)}
             />
-            <button className="w-full bg-primary-color hover:bg-white hover:text-primary-color transition-all duration-300 text-white font-medium border border-primary-color rounded-md px-3 py-2"
+            <button className="w-full btn"
                     type="submit" type="submit" disabled={loading}>
               {loading ? "Loading..." : "Next"}
             </button>
@@ -108,19 +104,18 @@ function PhoneVerification({ onComplete }) {
       case 2:
         return (
           <form onSubmit={handleOtpSubmit} className="flex flex-col gap-5 mt-5 justify-center items-center">
-            <span className='w-[100px]'><Image src={logo} alt="oli academy"/></span>
             {error && (
               <div className="error bg-red-100 rounded-md text-center px-2 w-fit mx-auto my-2 py-0 text-red-600">
                 {error}
               </div>
             )}
-            <input onFocus={inputFocusHandle} className="w-full border border-slate-200 px-3 py-2 rounded-md focus:border-b-2 focus:border-b-primary-color outline-none"
+            <input onFocus={inputFocusHandle} className="input"
               type="text"
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
-            <button className="w-full bg-primary-color hover:bg-white hover:text-primary-color transition-all duration-300 text-white font-medium border border-primary-color rounded-md px-3 py-2" type="submit" disabled={loading}>
+            <button className="w-full btn" type="submit" disabled={loading}>
               {loading ? "Loading..." : "Verify"}
             </button>
           </form>
@@ -128,26 +123,24 @@ function PhoneVerification({ onComplete }) {
       case 3:
         return (
           <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-5 mt-5 justify-center items-center">
-          <span className='w-[100px]'><Image src={logo} alt="oli academy"/></span>
-          {/* <h2 className="text-2xl font-semibold text-center my-2">Register OLI Academy!</h2> */}
           {error && (
             <div className="error bg-red-100 rounded-md text-center px-2 w-fit mx-auto my-2 py-0 text-red-600">
               {error}
             </div>
           )}
-            <input className="w-full border border-slate-200 px-3 py-2 rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" onFocus={inputFocusHandle}
+            <input className="input" onFocus={inputFocusHandle}
               type="password"
               placeholder="Enter password"
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
             />
-            <input className="w-full border border-slate-200 px-3 py-2 rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" onFocus={inputFocusHandle}
+            <input className="input" onFocus={inputFocusHandle}
               type="password"
               placeholder="Confirm password"
               value={confirmPasswordInput}
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
             />
-            <button className="w-full bg-primary-color hover:bg-white hover:text-primary-color transition-all duration-300 text-white font-medium border border-primary-color rounded-md px-3 py-2" type="submit" disabled={loading}>
+            <button className="w-full btn" type="submit" disabled={loading}>
               {loading ? "Loading..." : "Save Password"}
             </button>
           </form>

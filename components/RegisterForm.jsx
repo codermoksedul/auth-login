@@ -34,6 +34,7 @@ useEffect(() => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // Check if all required fields are filled
     if (!name || !email || !phone_number || !password) {
@@ -80,7 +81,7 @@ useEffect(() => {
     <>
       <div id="login_area" className="w-full h-screen relative flex flex-col justify-center items-center my-5">
         <div className="container">
-          <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-5 rounded-lg shadow-md">
+          <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-10 py-[50px] rounded-lg shadow-md">
             {phoneVerified ? (
               <>
                 <h2 className="text-2xl font-semibold text-center my-2">Register OLI Academy!</h2>
@@ -90,13 +91,15 @@ useEffect(() => {
                   </div>
                 )}
                 <form onSubmit={handleFormSubmit} action="" className="flex flex-col gap-5 mt-5">
-                  <input onFocus={inputFocusHandle} onChange={(e) => setName(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="text" name="name" placeholder="Enter Your Full Name" id="" />
+                  <input onFocus={inputFocusHandle} onChange={(e) => setName(e.target.value)} className="input" type="text" name="name" placeholder="Enter Your Full Name" id="" />
 
-                  <input onFocus={inputFocusHandle} onChange={(e) => setEmail(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="email" name="email" placeholder="Enter Your Email" id="" />
+                  <input onFocus={inputFocusHandle} onChange={(e) => setEmail(e.target.value)} className="input" type="email" name="email" placeholder="Enter Your Email" id="" />
 
-                  <input value={phone_number} onFocus={inputFocusHandle} onChange={(e) => setPhoneNumber(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="text" name="phone" placeholder="Enter Your Phone" id="" readOnly />
+                  <div className="absolute pointer-events-none opacity-0 select-none left-0 -z-0">
+                  <input value={phone_number} onFocus={inputFocusHandle} onChange={(e) => setPhoneNumber(e.target.value)} className="input" type="text" name="phone" placeholder="Enter Your Phone" id="" readOnly />
 
-                  <input value={password} onFocus={inputFocusHandle} onChange={(e) => setPassword(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="password" name="password" placeholder="Enter Your Password" id=""  readOnly/>
+                  <input value={password} onFocus={inputFocusHandle} onChange={(e) => setPassword(e.target.value)} className="input" type="password" name="password" placeholder="Enter Your Password" id=""  readOnly/>
+                  </div>
 
                   <button
                     className="bg-primary-color hover:bg-white hover:text-primary-color transition-all duration-300 text-white font-medium border border-primary-color rounded-md px-3 py-2"

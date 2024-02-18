@@ -1,16 +1,27 @@
 "use client";
 import logo from '@/public/images/logo.webp';
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import PhoneVerification from "./PhoneVerification";
+import BoardList from './register/BoardList';
+import DistrictList from './register/DistrictList';
+import YearList from './register/YearList';
 
 export default function RegisterForm({ handleSubmit }) {
   // State variables to manage form inputs and loading state
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
+  const [institute_name, setInstituteName] = useState("");
+  const [district, setDistrict] = useState("");
+  const [course, setCourse] = useState("");
+  const [year, setYear] = useState("");
+  const [board, setBoard] = useState("");
+  const [facebook_link, setFacebookLink] = useState("");
+  const [user_logo_url, setUserLogoURI] = useState("");
   const [password, setPassword] = useState("");
+  const [verified, setVerified] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [phoneVerified, setPhoneVerified] = useState(false);
@@ -23,23 +34,24 @@ export default function RegisterForm({ handleSubmit }) {
     setPhoneVerified(true);
     setVerifiedPhoneNumber(phone);
     setVerifiedPassword(pass);
+    setVerified(true); // Set verification status to true
   };
 
-// useEffect to update phone number and password fields when phoneVerified changes
-useEffect(() => {
-  if (phoneVerified) {
-    setPhoneNumber(verifiedPhoneNumber); // Set phone number input to verified phone number
-    setPassword(verifiedPassword); // Set password input to verified password
-  }
-}, [phoneVerified, verifiedPhoneNumber, verifiedPassword]);
-
+  // useEffect to update phone number and password fields when phoneVerified changes
+  useEffect(() => {
+    if (phoneVerified) {
+      setPhoneNumber(verifiedPhoneNumber);
+      setUserName(verifiedPhoneNumber);
+      setPassword(verifiedPassword);
+    }
+  }, [phoneVerified, verifiedPhoneNumber, verifiedPassword]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     // Check if all required fields are filled
-    if (!name || !email || !phone_number || !password) {
+    if (!name || !email || !institute_name || !district || !course || !year || !board ) {
       setError("All fields are necessary.");
       return;
     }
@@ -53,10 +65,7 @@ useEffect(() => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          email,
-          phone_number,
-          password,
+          name, email, username, phone_number, institute_name, district, course, year, board, facebook_link, user_logo_url, verified, password,
         }),
       });
 
@@ -74,7 +83,6 @@ useEffect(() => {
     }
   };
 
-  // Function to reset error state when input field is focused
   const inputFocusHandle = () => {
     setError("");
   };
@@ -98,10 +106,68 @@ useEffect(() => {
 
                   <input onFocus={inputFocusHandle} onChange={(e) => setEmail(e.target.value)} className="input" type="email" name="email" placeholder="Enter Your Email" id="" />
 
-                  <div className="absolute pointer-events-none opacity-0 select-none left-0 -z-0">
-                  <input value={phone_number} onFocus={inputFocusHandle} onChange={(e) => setPhoneNumber(e.target.value)} className="input" type="text" name="phone" placeholder="Enter Your Phone" id="" readOnly />
+                  <select
+                            onFocus={inputFocusHandle}
+                            onChange={(e) => setDistrict(e.target.value)}
+                            className="input"
+                            name="district"
+                            id=""
+                            defaultValue=""
+                            >
+                            <option value="" disabled>Select District</option>
+                            <DistrictList/>
+                        </select>
 
-                  <input value={password} onFocus={inputFocusHandle} onChange={(e) => setPassword(e.target.value)} className="input" type="password" name="password" placeholder="Enter Your Password" id=""  readOnly/>
+
+                        <select
+                            onFocus={inputFocusHandle}
+                            onChange={(e) => setCourse(e.target.value)}
+                            className="input"
+                            name="course"
+                            id=""
+                            defaultValue="" // Set default value to empty
+                        >
+                            <option value="" disabled>SSC/HSC</option>
+                            <option value="SSC">SSC</option>
+                            <option value="HSC">HSC</option>
+                        </select>
+
+                        <select
+                            onFocus={inputFocusHandle}
+                            onChange={e => setYear(e.target.value)}
+                            className="input"
+                            name="Year"
+                            id=""
+                            defaultValue=""
+                            >
+                            <option value="" disabled>Select Year</option>
+                            <YearList/>
+                        </select>
+
+                        <select
+                            onFocus={inputFocusHandle}
+                            onChange={e => setBoard(e.target.value)}
+                            className="input"
+                            name="board"
+                            id=""
+                            defaultValue=""
+                            >
+                            <option value="" disabled>Select Board</option>
+                            <BoardList/>
+                        </select>
+
+                        <input onFocus={inputFocusHandle} onChange={e => setFacebookLink(e.target.value)}  className="input" type="text" name="facebooklink" placeholder="Facebook link (optional)" id="" />
+
+                        <input onFocus={inputFocusHandle} onChange={e => setUserLogoURI(e.target.value)}  className="input" type="text" name="logo" placeholder="profile photo link (optional)" id="" />
+
+                  <div className="">
+                    <input value={phone_number} onFocus={inputFocusHandle} onChange={(e) => setPhoneNumber(e.target.value)} className="input" type="text" name="phone" placeholder="Enter Your Phone" id="" readOnly />
+                    
+                    <input value={username} onFocus={inputFocusHandle} onChange={(e) => setUserName(e.target.value)} className="input" type="text" name="username" placeholder="Enter Your Username" id="" readOnly />
+
+                    <input value={password} onFocus={inputFocusHandle} onChange={(e) => setPassword(e.target.value)} className="input" type="password" name="password" placeholder="Enter Your Password" id=""  readOnly/>
+
+                    <input value={verified} onFocus={inputFocusHandle} onChange={(e) => setVerified(e.target.value)} className="input" type="text" name="verified" placeholder="verified" id=""  readOnly/>
                   </div>
 
                   <button
@@ -112,11 +178,6 @@ useEffect(() => {
                     {loading ? "Loading..." : "Register"} {/* Show loading text or Register text */}
                   </button>
                 </form>
-                <div className="mt-5 text-center">
-                  <p>
-                    Already have an account? <Link className="font-medium underline text-primary-color hover:text-primary-color" href={'/login'}>Login</Link>
-                  </p>
-                </div>
               </>
             ) : (
               <PhoneVerification onComplete={onComplete} />

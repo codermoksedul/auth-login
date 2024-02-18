@@ -81,9 +81,9 @@ useEffect(() => {
 
   return (
     <>
-      <div id="login_area" className="w-full h-screen relative flex flex-col justify-center items-center my-5">
+      <div id="login_area" className="w-full h-screen relative flex flex-col justify-center items-center my-5  p-2">
         <div className="container">
-          <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-10 py-[50px] justify-center items-center rounded-lg shadow-md">
+          <div className="login_box border border-slate-200 max-w-[400px] mx-auto p-10 py-[50px] justify-center items-center rounded-lg shadow-md">
             <span className='w-[100px] block mx-auto mb-[50px]'><Image src={logo} alt="oli academy"/></span>
             {phoneVerified ? (
               <>

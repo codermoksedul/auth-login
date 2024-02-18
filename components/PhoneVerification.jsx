@@ -129,7 +129,7 @@ function PhoneVerification({ onComplete }) {
             />
             <button className="w-full btn"
                     type="submit" type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Next"}
+              {loading ? "Sending..." : "Send OTP"}
             </button>
           </form>
         );
@@ -148,7 +148,7 @@ function PhoneVerification({ onComplete }) {
               onChange={(e) => setOtp(e.target.value)}
             />
             <button className="w-full btn" type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Verify"}
+              {loading ? "Verifying..." : "Verify"}
             </button>
           </form>
         );
@@ -173,7 +173,7 @@ function PhoneVerification({ onComplete }) {
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
             />
             <button className="w-full btn" type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Save Password"}
+              {loading ? "Saving..." : "Save Password"}
             </button>
           </form>
         );

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function PhoneVerification({ onComplete }) {
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
@@ -9,44 +9,99 @@ function PhoneVerification({ onComplete }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userExists, setUserExists] = useState(false); // New state to track user existence
+
   const staticOtp = "1"; // Static OTP value
 
-  const handlePhoneSubmit = (e) => {
-    e.preventDefault();
+  // Function to check if a user with the provided phone number already exists
+  const checkUserExists = async () => {
     setLoading(true);
-  
+
+    try {
+      const res = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: phoneNumberInput }),
+      });
+
+      const { user } = await res.json();
+
+      if (user) {
+        setError("User already exists");
+        setUserExists(true);
+      } else {
+        setUserExists(false);
+        setStep(2); // Proceed to OTP verification step
+      }
+    } catch (error) {
+      setError("Error checking user existence");
+    }
+
+    setLoading(false);
+  };
+
+
+  useEffect(() => {
+    // Remove non-numeric characters from phone number input
+    setPhoneNumberInput(phoneNumberInput.replace(/\D/g, ""));
+  }, [phoneNumberInput]);
+
+  const handlePhoneSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Set loading state to true when form is submitted
+
     // Check if all required fields are filled
     if (!phoneNumberInput) {
-      setError("Enter phone number");
-      setLoading(false);
+      setError("Enter your phone number");
+      setLoading(false); // Set loading state back to false
       return;
     }
-  
+
     // Remove leading +880 if present
     let processedPhoneNumber = phoneNumberInput.trim().replace(/^\+880/, '');
-  
+
     // Validate Bangladeshi phone number format
     const bangladeshiNumberRegex = /^(?:01)[13-9]\d{8}$/;
     if (!bangladeshiNumberRegex.test(processedPhoneNumber)) {
       setError("Enter a valid phone number");
-      setLoading(false);
+      setLoading(false); // Set loading state back to false
       return;
     }
-  
+
     // Set the processed phone number for further processing
     setPhoneNumberInput(processedPhoneNumber);
-  
-    setTimeout(() => {
-      setStep(2);
-      setLoading(false);
-    }, 500); // 2000 milliseconds (2 seconds) delay
+
+    try {
+      // Check if the user exists
+      const res = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: processedPhoneNumber }),
+      });
+
+      const { user } = await res.json();
+
+      if (user) {
+        setError("User already exists");
+        setUserExists(true);
+        setLoading(false);
+      } else {
+        setUserExists(false);
+        setStep(2); // Proceed to OTP verification step
+      }
+    } catch (error) {
+      setError("Error checking user existence");
+    }
   };
-  
-  
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+
     // Simulating a delay for demonstration purposes (you may replace this with your actual asynchronous OTP verification process)
     // Check if all required fields are filled
     if (!otp) {
@@ -55,6 +110,7 @@ function PhoneVerification({ onComplete }) {
       return;
     }
 
+    // Simulate OTP verification
     setTimeout(() => {
       if (otp === staticOtp) {
         setStep(3);
@@ -63,13 +119,13 @@ function PhoneVerification({ onComplete }) {
         setOtp("");
       }
       setLoading(false);
-    }, 500); // 2000 milliseconds (2 seconds) delay
+    }, 2000);
   };
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     if (!passwordInput) {
       setError("Enter Your New Password");
       setLoading(false);
@@ -80,7 +136,7 @@ function PhoneVerification({ onComplete }) {
       setLoading(false);
       return;
     }
-  
+
     // Password complexity check
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{6,20}$/;
     if (!passwordRegex.test(passwordInput)) {
@@ -88,7 +144,7 @@ function PhoneVerification({ onComplete }) {
       setLoading(false);
       return;
     }
-  
+
     if (passwordInput !== confirmPasswordInput) {
       setError("Passwords do not match");
       setLoading(false);
@@ -96,20 +152,19 @@ function PhoneVerification({ onComplete }) {
       setConfirmPasswordInput("");
       return;
     }
-  
+
     // Simulate a delay for demonstration purposes
     setTimeout(() => {
       onComplete(phoneNumberInput, passwordInput); // Passing verified phone number and password to the parent component
       setLoading(false);
     }, 1000); // Delay for 2 seconds before proceeding
   };
-  
-  
 
   // Function to reset error state when input field is focused
   const inputFocusHandle = () => {
     setError("");
   };
+
 
   const renderStep = () => {
     switch (step) {
@@ -122,7 +177,7 @@ function PhoneVerification({ onComplete }) {
               </div>
             )}
             <input onFocus={inputFocusHandle} className="input"
-              type="text"
+              type="text" name="phone number"
               placeholder="Enter phone number"
               value={phoneNumberInput}
               onChange={(e) => setPhoneNumberInput(e.target.value)}

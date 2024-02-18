@@ -17,20 +17,20 @@ function ForgetPassword() {
   const staticOtp = "1"; // Static OTP value
   const router = useRouter();
 
-  const handlePhoneSubmit = (e) => {
+  const handlePhoneSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     // Check if all required fields are filled
     if (!phoneNumberInput) {
       setError("Enter phone number");
       setLoading(false);
       return;
     }
-  
+
     // Remove leading +880 if present
     let processedPhoneNumber = phoneNumberInput.trim().replace(/^\+880/, '');
-  
+
     // Validate Bangladeshi phone number format
     const bangladeshiNumberRegex = /^(?:01)[13-9]\d{8}$/;
     if (!bangladeshiNumberRegex.test(processedPhoneNumber)) {
@@ -38,14 +38,32 @@ function ForgetPassword() {
       setLoading(false);
       return;
     }
-  
-    // Set the processed phone number for further processing
-    setPhoneNumberInput(processedPhoneNumber);
-  
-    setTimeout(() => {
-      setStep(2);
+
+    try {
+      // Check if the user exists
+      const res = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: processedPhoneNumber }),
+      });
+
+      const { user } = await res.json();
+
+      if (!user) {
+        setError("User not found");
+        setLoading(false);
+        return;
+      }
+
+      // User found, proceed to step 2
       setLoading(false);
-    }, 500); // 2000 milliseconds (2 seconds) delay
+      setStep(2);
+    } catch (error) {
+      setError("Error checking user existence");
+      setLoading(false);
+    }
   };
   
   
@@ -133,7 +151,7 @@ function ForgetPassword() {
                             </div>
                             )}
                             <input onFocus={inputFocusHandle} className="input"
-                            type="text"
+                            type="text" name='phone number'
                             placeholder="Enter phone number"
                             value={phoneNumberInput}
                             onChange={(e) => setPhoneNumberInput(e.target.value)}

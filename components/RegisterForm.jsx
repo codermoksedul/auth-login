@@ -49,6 +49,22 @@ const onComplete = (phone, pass) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    const resUserExists = await fetch("api/userExists", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    const { user } = await resUserExists.json();
+
+    if (user) {
+      setError("User already exists please Login!");
+      setLoading(false); // Reset loading state
+      return;
+    }
   
     // Check if all required fields are filled
     if (!name || !email || !institute_name || !district || !course || !year || !board ) {

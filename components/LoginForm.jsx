@@ -4,23 +4,35 @@ import { signIn } from 'next-auth/react';
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function LoginForm() {
-    const [username, setUsername] = useState(""); // Change state variable name to 'username'
+    const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
+    useEffect(() => {
+        // Remove non-numeric characters from username input
+        const numericUsername = username.replace(/\D/g, "");
+        setUserName(numericUsername);
+    }, [username]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if all required fields are filled
-        if (!username || !password) {
-            setError("Please input your phone & password");
+
+        if (!username) {
+            setError("Please input your phone");
             return;
+            setLoading(false);
+        }
+        if (!password) {
+            setError("Please input your password");
+            return;
+            setLoading(false);
         }
         
         try {
@@ -56,8 +68,24 @@ function LoginForm() {
                             </div>
                         )}
                         <form onSubmit={handleSubmit} action="" className="flex flex-col gap-5 mt-5">
-                            <input onChange={e => setUsername(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="text" name="phone number" placeholder="Phone Number" id=""/>
-                            <input onChange={e => setPassword(e.target.value)} className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" type="password" name="password" placeholder="Password" id=""/>
+                            <input 
+                                onChange={e => setUserName(e.target.value)} 
+                                className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" 
+                                type="tel" 
+                                name="phone number" 
+                                placeholder="Phone Number" 
+                                id=""
+                                value={username} // Add value attribute
+                            />
+                            <input 
+                                onChange={e => setPassword(e.target.value)} 
+                                className="border border-slate-200 px-3 py-2 w-full rounded-md focus:border-b-2 focus:border-b-primary-color outline-none" 
+                                type="password" 
+                                name="password" 
+                                placeholder="Password" 
+                                id=""
+                                value={password} // Add value attribute
+                            />
                             
                             <div className=" text-start text-sm">
                                 <Link className="font-medium underline text-primary-color hover:text-primary-color" href={'/reset-password'}>Forgot password?</Link>
@@ -77,3 +105,4 @@ function LoginForm() {
 }
 
 export default LoginForm;
+

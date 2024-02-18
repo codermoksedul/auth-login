@@ -1,4 +1,4 @@
-// api/auth/[...nextauth]/rute.js
+// api/auth/[...nextauth]/route.js
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
@@ -12,11 +12,11 @@ export const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { username, password } = credentials;
 
         try {
           await connectMongoDB();
-          const user = await User.findOne({ email });
+          const user = await User.findOne({ username });
 
           if (!user) {
             return null;

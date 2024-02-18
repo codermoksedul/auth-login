@@ -87,7 +87,7 @@ function ForgetPassword() {
         setOtp("");
       }
       setLoading(false);
-    }, 500); // 2000 milliseconds (2 seconds) delay
+    }, 1000); // 2000 milliseconds (2 seconds) delay
   };
 
   const handlePasswordSubmit = (e) => {

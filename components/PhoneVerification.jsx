@@ -50,29 +50,26 @@ function PhoneVerification({ onComplete }) {
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading state to true when form is submitted
-
+  
     // Check if all required fields are filled
     if (!phoneNumberInput) {
       setError("Enter your phone number");
-      setLoading(false); // Set loading state back to false
       return;
     }
-
+  
     // Remove leading +880 if present
     let processedPhoneNumber = phoneNumberInput.trim().replace(/^\+880/, '');
-
+  
     // Validate Bangladeshi phone number format
     const bangladeshiNumberRegex = /^(?:01)[13-9]\d{8}$/;
     if (!bangladeshiNumberRegex.test(processedPhoneNumber)) {
       setError("Enter a valid phone number");
-      setLoading(false); // Set loading state back to false
       return;
     }
-
+  
     // Set the processed phone number for further processing
     setPhoneNumberInput(processedPhoneNumber);
-
+  
     try {
       // Check if the user exists
       const res = await fetch("api/userExists", {
@@ -82,13 +79,12 @@ function PhoneVerification({ onComplete }) {
         },
         body: JSON.stringify({ username: processedPhoneNumber }),
       });
-
+  
       const { user } = await res.json();
-
+  
       if (user) {
         setError("User already exists");
         setUserExists(true);
-        setLoading(false);
       } else {
         setUserExists(false);
         setStep(2); // Proceed to OTP verification step
@@ -97,6 +93,7 @@ function PhoneVerification({ onComplete }) {
       setError("Error checking user existence");
     }
   };
+  
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
@@ -119,7 +116,7 @@ function PhoneVerification({ onComplete }) {
         setOtp("");
       }
       setLoading(false);
-    }, 2000);
+    }, 1000);
   };
 
   const handlePasswordSubmit = (e) => {

@@ -96,8 +96,14 @@ function PhoneVerification({ onComplete }) {
       setConfirmPasswordInput("");
       return;
     }
-    onComplete(phoneNumberInput, passwordInput); // Passing verified phone number and password to the parent component
+  
+    // Simulate a delay for demonstration purposes
+    setTimeout(() => {
+      onComplete(phoneNumberInput, passwordInput); // Passing verified phone number and password to the parent component
+      setLoading(false);
+    }, 1000); // Delay for 2 seconds before proceeding
   };
+  
   
 
   // Function to reset error state when input field is focused

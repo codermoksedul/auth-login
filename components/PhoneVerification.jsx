@@ -14,18 +14,35 @@ function PhoneVerification({ onComplete }) {
   const handlePhoneSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     // Check if all required fields are filled
     if (!phoneNumberInput) {
       setError("Enter phone number");
       setLoading(false);
       return;
     }
+  
+    // Remove leading +880 if present
+    let processedPhoneNumber = phoneNumberInput.trim().replace(/^\+880/, '');
+  
+    // Validate Bangladeshi phone number format
+    const bangladeshiNumberRegex = /^(?:01)[13-9]\d{8}$/;
+    if (!bangladeshiNumberRegex.test(processedPhoneNumber)) {
+      setError("Enter a valid phone number");
+      setLoading(false);
+      return;
+    }
+  
+    // Set the processed phone number for further processing
+    setPhoneNumberInput(processedPhoneNumber);
+  
     setTimeout(() => {
       setStep(2);
       setLoading(false);
     }, 500); // 2000 milliseconds (2 seconds) delay
   };
+  
+  
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +69,7 @@ function PhoneVerification({ onComplete }) {
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     if (!passwordInput) {
       setError("Enter Your New Password");
       setLoading(false);
@@ -63,9 +80,17 @@ function PhoneVerification({ onComplete }) {
       setLoading(false);
       return;
     }
-
+  
+    // Password complexity check
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{6,20}$/;
+    if (!passwordRegex.test(passwordInput)) {
+      setError("Provide a strong password");
+      setLoading(false);
+      return;
+    }
+  
     if (passwordInput !== confirmPasswordInput) {
-      setError("Passwords not Matching");
+      setError("Passwords do not match");
       setLoading(false);
       setPasswordInput("");
       setConfirmPasswordInput("");
@@ -73,6 +98,7 @@ function PhoneVerification({ onComplete }) {
     }
     onComplete(phoneNumberInput, passwordInput); // Passing verified phone number and password to the parent component
   };
+  
 
   // Function to reset error state when input field is focused
   const inputFocusHandle = () => {

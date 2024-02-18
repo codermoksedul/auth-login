@@ -28,14 +28,14 @@ export default function RegisterForm({ handleSubmit }) {
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [verifiedPassword, setVerifiedPassword] = useState("");
 
-  // Function to handle phone verification completion
-  const onComplete = (phone, pass) => {
-    console.log("Phone verification and password setup completed");
-    setPhoneVerified(true);
-    setVerifiedPhoneNumber(phone);
-    setVerifiedPassword(pass);
-    setVerified(true); // Set verification status to true
-  };
+
+// Function to handle phone verification completion
+const onComplete = (phone, pass) => {
+  console.log("Phone verification and password setup completed");
+  setPhoneVerified(true);
+  setVerifiedPhoneNumber(phone);
+  setVerifiedPassword(pass);
+};
 
   // useEffect to update phone number and password fields when phoneVerified changes
   useEffect(() => {
@@ -43,22 +43,22 @@ export default function RegisterForm({ handleSubmit }) {
       setPhoneNumber(verifiedPhoneNumber);
       setUserName(verifiedPhoneNumber);
       setPassword(verifiedPassword);
+      setVerified(true); 
     }
   }, [phoneVerified, verifiedPhoneNumber, verifiedPassword]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
+  
     // Check if all required fields are filled
     if (!name || !email || !institute_name || !district || !course || !year || !board ) {
       setError("All fields are necessary.");
       return;
     }
-
+  
+    setLoading(true); // Move setLoading inside try block
+  
     try {
-      setLoading(true);
-
       const res = await fetch("api/register", {
         method: "POST",
         headers: {
@@ -68,16 +68,16 @@ export default function RegisterForm({ handleSubmit }) {
           name, email, username, phone_number, institute_name, district, course, year, board, facebook_link, user_logo_url, verified, password,
         }),
       });
-
+  
       if (res.ok) {
         const form = e.target;
         form.reset();
         window.location.href = "/login";
       } else {
-        console.log("User registration failed.");
+        setError("User registration failed.");
       }
     } catch (error) {
-      console.log("Error during registration: ", error);
+      setError("Error during registration: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -105,6 +105,8 @@ export default function RegisterForm({ handleSubmit }) {
                   <input onFocus={inputFocusHandle} onChange={(e) => setName(e.target.value)} className="input" type="text" name="name" placeholder="Enter Your Full Name" id="" />
 
                   <input onFocus={inputFocusHandle} onChange={(e) => setEmail(e.target.value)} className="input" type="email" name="email" placeholder="Enter Your Email" id="" />
+
+                  <input onFocus={inputFocusHandle} onChange={(e) => setInstituteName(e.target.value)} className="input" type="text" name="institute" placeholder="School/College" id="" />
 
                   <select
                             onFocus={inputFocusHandle}
@@ -160,7 +162,7 @@ export default function RegisterForm({ handleSubmit }) {
 
                         <input onFocus={inputFocusHandle} onChange={e => setUserLogoURI(e.target.value)}  className="input" type="text" name="logo" placeholder="profile photo link (optional)" id="" />
 
-                  <div className="">
+                  <div className="absolute left-0 top-0 pointer-events-none select-none opacity-0">
                     <input value={phone_number} onFocus={inputFocusHandle} onChange={(e) => setPhoneNumber(e.target.value)} className="input" type="text" name="phone" placeholder="Enter Your Phone" id="" readOnly />
                     
                     <input value={username} onFocus={inputFocusHandle} onChange={(e) => setUserName(e.target.value)} className="input" type="text" name="username" placeholder="Enter Your Username" id="" readOnly />

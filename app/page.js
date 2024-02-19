@@ -1,8 +1,15 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export default function Home() {
+export default async function Register() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) redirect("/login");
+
   return (
-    <>
-      <h1>Auth</h1>
-    </>
-  );
+    <main>
+      <h1>Home Page</h1>
+    </main>
+    );
 }

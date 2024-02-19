@@ -1,0 +1,28 @@
+@import "fonts.scss";
+@import "tailwind.scss";
+
+.container {
+  max-width: 1400px;
+  padding: 0px 20px;
+}
+body {
+  box-sizing: border-box;
+  font-family: "Baloo Da 2", "Hind Siliguri", "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  font-style: normal;
+}
+img {
+  max-width: 100%;
+}
+#examStartBtn {
+  display: none;
+}
+.examStartBtnActive {
+  display: block !important;
+}
+.examStartTimeEnd {
+  display: none !important;
+}

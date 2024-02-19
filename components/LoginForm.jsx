@@ -57,9 +57,9 @@ function LoginForm() {
 
     return (
         <>
-            <div id="login_area" className='w-full h-screen relative flex flex-col justify-center items-center p-2'>
+            <div id="login_area" className="bg-[url('/images/bg-patern.webp')] w-full h-screen relative flex flex-col justify-center items-center p-2">
                 <div className="container">
-                    <div className="login_box border border-slate-100 max-w-[400px] mx-auto p-5 rounded-lg shadow-md">
+                    <div className="login_box border bg-white border-slate-100 max-w-[400px] mx-auto p-5 rounded-lg shadow-md">
                         <span className='w-[80px] block text-center mx-auto py-3'><Image src={Logo} alt="oli academy"/></span>
                         <h2 className="text-2xl font-semibold text-center my-2">Login OLI Academy!</h2>
                         {error && (

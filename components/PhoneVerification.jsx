@@ -18,6 +18,7 @@ function PhoneVerification({ onComplete }) {
     setLoading(true);
 
     try {
+      setLoading(true);
       const res = await fetch("api/userExists", {
         method: "POST",
         headers: {
@@ -30,10 +31,12 @@ function PhoneVerification({ onComplete }) {
 
       if (user) {
         setError("User already exists");
+        setLoading(false);
         setUserExists(true);
       } else {
         setUserExists(false);
-        setStep(2); // Proceed to OTP verification step
+        setLoading(true);
+        setStep(2); 
       }
     } catch (error) {
       setError("Error checking user existence");
@@ -70,28 +73,34 @@ function PhoneVerification({ onComplete }) {
     // Set the processed phone number for further processing
     setPhoneNumberInput(processedPhoneNumber);
   
-    try {
-      // Check if the user exists
-      const res = await fetch("api/userExists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: processedPhoneNumber }),
-      });
+    // Show loading animation after a 2-second delay
+    setLoading(true);
+    setTimeout(async () => {
+      try {
+        // Check if the user exists
+        const res = await fetch("api/userExists", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: processedPhoneNumber }),
+        });
   
-      const { user } = await res.json();
+        const { user } = await res.json();
   
-      if (user) {
-        setError("User already exists");
-        setUserExists(true);
-      } else {
-        setUserExists(false);
-        setStep(2); // Proceed to OTP verification step
+        if (user) {
+          setError("User already exists");
+          setUserExists(true);
+        } else {
+          setUserExists(false);
+          setStep(2); // Proceed to OTP verification step
+        }
+      } catch (error) {
+        setError("Error checking user existence");
+      } finally {
+        setLoading(false); // Hide loading animation after API call
       }
-    } catch (error) {
-      setError("Error checking user existence");
-    }
+    }, 1000); // 2-second delay
   };
   
 
